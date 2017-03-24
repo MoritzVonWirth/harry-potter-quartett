@@ -86,7 +86,6 @@ namespace Quartett
                 }
                 file.Close();
             }
-
             return image;
         }
     }

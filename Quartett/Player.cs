@@ -91,7 +91,7 @@ namespace Quartett
                 {
                     Console.WriteLine(line);
                 }
-               
+                Console.WriteLine();
                 Console.WriteLine("Wähle die Eigenschaft die zu vergleichen möchtest:");
 
                 Console.WriteLine();

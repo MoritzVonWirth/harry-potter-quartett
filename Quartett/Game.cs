@@ -127,12 +127,17 @@ namespace Quartett
                 }
 
                 Player player = currentPlayer;
-
                 Property property = player.PlayCard();
                 List<Card> currentCardsOfAllPlayers = GetCurrentCardsOfAllPlayers();
                 Player winner = CompareCardsAndFindWinner(property, currentCardsOfAllPlayers);
                 CurrentPlayer = winner;
-                Console.WriteLine(winner.Name+" hat diese Runde gewonnen.");
+                Console.WriteLine();
+                Console.WriteLine("Statisitk:");
+                Console.WriteLine();
+                foreach (Player playerAfterRound in players)
+                {
+                    Console.WriteLine(playerAfterRound.Name+" "+playerAfterRound.Cards.Count()+" Karten");
+                }
                 Console.ReadLine();
                 Console.Clear();
                 PlayRound();
@@ -191,6 +196,29 @@ namespace Quartett
             }
 
             Player winner = winningCard.Player;
+
+            Console.WriteLine();
+            Console.WriteLine(winningCard.Name+" schlägt:");
+
+            foreach (Card card in currentCardsOfAllPlayers)
+            {
+                if (card.Name != winningCard.Name)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(card.Name);
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine(winner.Name + " hat diese Runde gewonnen.");
+            Console.WriteLine();
+
+            if (winner.Id == 0)
+            {
+                Console.WriteLine("Du erhälst die gegnerischen Karten!");
+            }else
+            {
+                Console.WriteLine("Deine Karte ging an: "+winner.Name);
+            }
 
             foreach (Card card in currentCardsOfAllPlayers)
             {
