@@ -73,7 +73,7 @@ namespace Quartett
             {
                 Player player = new Player();
                 player.Id = i;
-                player.Name = "Spieler" + (i+1);
+                player.Name = "Spieler" + (i + 1);
                 players.Add(player);
             }
         }
@@ -103,7 +103,7 @@ namespace Quartett
             int i = 1;
             foreach (Card card in cards)
             {
-                if(i == Player.numberOfPlayers)
+                if (i == Player.numberOfPlayers)
                 {
                     i = 0;
                 }
@@ -130,16 +130,25 @@ namespace Quartett
                 Property property = player.PlayCard();
                 List<Card> currentCardsOfAllPlayers = GetCurrentCardsOfAllPlayers();
                 Player winner = CompareCardsAndFindWinner(property, currentCardsOfAllPlayers);
-                CurrentPlayer = winner;
-                Console.WriteLine();
-                Console.WriteLine("Statisitk:");
-                Console.WriteLine();
-                foreach (Player playerAfterRound in players)
+
+                if (winner.Name == null)
                 {
-                    Console.WriteLine(playerAfterRound.Name+" "+playerAfterRound.Cards.Count()+" Karten");
+                    CurrentPlayer = currentCardsOfAllPlayers[0].Player;
+                    Console.WriteLine("Es liegt ein Split vor es wird eine neue Eigenschaft gewählt!");
                 }
-                Console.ReadLine();
-                Console.Clear();
+                else
+                {
+                    CurrentPlayer = winner;
+                    Console.WriteLine();
+                    Console.WriteLine("Statisitk:");
+                    Console.WriteLine();
+                    foreach (Player playerAfterRound in players)
+                    {
+                        Console.WriteLine(playerAfterRound.Name + " " + playerAfterRound.Cards.Count() + " Karten");
+                    }
+                    Console.ReadLine();
+                    Console.Clear();
+                }
                 PlayRound();
             }
             else
@@ -166,6 +175,8 @@ namespace Quartett
         {
             Card winningCard = currentCardsOfAllPlayers.First();
 
+            Player winner = new Player();
+
             int indexOfProperty = 0;
 
             foreach (Card card in currentCardsOfAllPlayers)
@@ -181,53 +192,58 @@ namespace Quartett
                     }
                     i++;
                 }
-                if(indexOfProperty > 0)
+                if (indexOfProperty > 0)
                 {
                     break;
                 }
             }
+
+            if (Split(currentCardsOfAllPlayers, indexOfProperty) == false)
+            {
+                foreach (Card card in currentCardsOfAllPlayers)
+                {
+                    if (card.Properties[indexOfProperty].Value > winningCard.Properties[indexOfProperty].Value)
+                    {
+                        winningCard = card;
+                    }
+                }
+
+                winner = winningCard.Player;
+
+                Console.WriteLine();
+                Console.WriteLine(winningCard.Name + " schlägt:");
+
+                foreach (Card card in currentCardsOfAllPlayers)
+                {
+                    if (card.Name != winningCard.Name)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine(card.Name);
+                    }
+                }
+                Console.WriteLine();
+                Console.WriteLine(winner.Name + " hat diese Runde gewonnen.");
+                Console.WriteLine();
+
+                if (winner.Id == 0)
+                {
+                    Console.WriteLine("Du erhälst die gegnerischen Karten!");
+                }
+                else
+                {
+                    Console.WriteLine("Deine Karte ging an: " + winner.Name);
+                }
+
+                foreach (Card card in currentCardsOfAllPlayers)
+                {
+                    card.Player.Cards.Remove(card);
+                    winner.Cards.Add(card);
+                    card.Player = winner;
+                }
+                return winner;
+            }
+            return currentPlayer;
             
-            foreach (Card card in currentCardsOfAllPlayers)
-            {
-                if(card.Properties[indexOfProperty].Value > winningCard.Properties[indexOfProperty].Value)
-                {
-                    winningCard = card;
-                }
-            }
-
-            Player winner = winningCard.Player;
-
-            Console.WriteLine();
-            Console.WriteLine(winningCard.Name+" schlägt:");
-
-            foreach (Card card in currentCardsOfAllPlayers)
-            {
-                if (card.Name != winningCard.Name)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine(card.Name);
-                }
-            }
-            Console.WriteLine();
-            Console.WriteLine(winner.Name + " hat diese Runde gewonnen.");
-            Console.WriteLine();
-
-            if (winner.Id == 0)
-            {
-                Console.WriteLine("Du erhälst die gegnerischen Karten!");
-            }else
-            {
-                Console.WriteLine("Deine Karte ging an: "+winner.Name);
-            }
-
-            foreach (Card card in currentCardsOfAllPlayers)
-            {
-                card.Player.Cards.Remove(card);
-                winner.Cards.Add(card);
-                card.Player = winner;
-            }
-
-            return winner;
         }
 
         // Get current cards of all players
@@ -246,7 +262,7 @@ namespace Quartett
         public bool HasEveryPlayerEnoughCards()
         {
             bool hasEnoughCards = true;
-            
+
             foreach (Player player in players)
             {
                 if (player.Cards.Count <= 0)
@@ -255,6 +271,33 @@ namespace Quartett
                 }
             }
             return hasEnoughCards;
+        }
+
+        // Split
+        public bool Split(List<Card> cards, int propertyIndex)
+        {
+
+            bool split = false;
+
+            int i = 0;
+
+            foreach (Card card in cards)
+            {
+                Card currentCard = cards[i];
+
+                foreach (Card otherCard in cards)
+                {
+                    if(otherCard.Properties[propertyIndex].Value == currentCard.Properties[propertyIndex].Value)
+                    {
+                        if (otherCard.Id != currentCard.Id)
+                        {
+                            split = true;
+                        }
+                    }
+                }
+                i++;
+            }
+            return split;
         }
     }
 }

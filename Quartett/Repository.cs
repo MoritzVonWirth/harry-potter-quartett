@@ -8,7 +8,7 @@ namespace Quartett
 {
     class Repository
     {
-        public  int cards = magic.Count();
+        public int cards = magic.Count();
 
         public string[] name = new string[]
         {  "Fleur Delacour",
@@ -257,7 +257,7 @@ namespace Quartett
             "@@@@&@@@@@@@@@@@#####(#####%%######%%%%%###&@@@@@@@@@@@@@@@"
         };
 
-        public int[][] stats = {magic, cleverness, braveness, knowledge, hate};
+        public int[][] stats = { magic, cleverness, braveness, knowledge, hate };
 
         public string[] unit = new string[]
         {

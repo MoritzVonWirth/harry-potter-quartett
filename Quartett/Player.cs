@@ -33,7 +33,7 @@ namespace Quartett
         public string Name
         {
             get
-            { 
+            {
                 return name;
             }
             set
@@ -82,7 +82,7 @@ namespace Quartett
                 int d = 4;
                 int e = 5;
 
-                Console.WriteLine("Du hast "+card.Name+" gezogen!");
+                Console.WriteLine("Du hast " + card.Name + " gezogen!");
                 Console.WriteLine();
 
                 List<string> image = card.GetImage();
@@ -198,7 +198,7 @@ namespace Quartett
                 }
             }
 
-            return property; 
+            return property;
         }
 
         // Get actual card

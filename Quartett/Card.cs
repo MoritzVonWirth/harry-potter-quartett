@@ -16,7 +16,7 @@ namespace Quartett
 
         private Player player;
 
-        private List <String> image = new List<string>();
+        private List<String> image = new List<string>();
 
         public const int numberOfProperties = 5;
 
